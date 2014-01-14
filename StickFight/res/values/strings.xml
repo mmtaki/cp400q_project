@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">StickFight</string>
+    <string name="action_settings">Settings</string>
+    <string name="text_menu">MENU</string>
+    <string name="button_pvp">PvP</string>
+    <string name="button_plus">+</string>
+    <string name="button_minus">-</string>
+    <string name="text_default_rounds">1 Round</string>
+</resources>
