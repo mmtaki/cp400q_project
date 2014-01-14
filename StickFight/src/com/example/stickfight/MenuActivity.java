@@ -23,6 +23,7 @@ public class MenuActivity extends Activity {
 	
 	public void createGame(View v){
 		Intent i = new Intent();
+		i = null;
 	}
 
 }
