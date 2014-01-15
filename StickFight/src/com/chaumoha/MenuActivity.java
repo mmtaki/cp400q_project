@@ -1,4 +1,6 @@
-package com.example.stickfight;
+package com.chaumoha;
+
+import com.example.stickfight.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,8 +26,9 @@ public class MenuActivity extends Activity {
 	}
 	
 	public void createGame(View v){
-		Intent i = new Intent();
-		i = null;
+		Intent i = new Intent(this,FightActivity.class);
+		//Intent i = new Intent(this,MenuActivity.class);
+		this.startActivity(i);
 	}
 	
 	public void addRound(View v){
