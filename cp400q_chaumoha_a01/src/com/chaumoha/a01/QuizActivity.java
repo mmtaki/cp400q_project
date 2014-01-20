@@ -9,6 +9,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Assignment 01 main class for android app
+ * @author Bryan Chau &amp; Mohamed Mohamedtaki
+ * @version 01/18/2013
+ *
+ */
 public class QuizActivity extends Activity {
 
 	// Buttons
@@ -98,10 +104,15 @@ public class QuizActivity extends Activity {
 		Toast.makeText(QuizActivity.this, s, Toast.LENGTH_SHORT).show();
 	}
 	
+	/**
+	 * Move to the next or previous question
+	 * @param b A boolean value indicating direction: true=next, false=previous</b>
+	 */
 	private void moveNextQuestion (boolean b) {
 		if (b) {
 			mCurrentIndex++;
 		} else {
+			// check to avoid indexoutofbound exception
 			if (mCurrentIndex - 1 >= 0)
 				mCurrentIndex--;
 		}

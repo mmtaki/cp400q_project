@@ -1,5 +1,9 @@
 package com.chaumoha.a01;
-
+/**
+ * Taken from textbook
+ * @author Android Programming: The Big Nerd Ranch Guide
+ *
+ */
 public class TrueFalse {
 	
 	private int mQuestion;
