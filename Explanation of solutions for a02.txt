@@ -1,0 +1,12 @@
+1.when you view the answer, and rotate the device in CheatActivity and press back.
+This is solved by adding the savedInstanceState in the onCreate.
+If this is not null, it can retrieve saved data from the onSaveInstanceState method override.
+So we save the boolean that says if they have cheated, so even on a device rotate we still know that they cheated.
+
+2.when pressing next, you can cheat again when you get back to the question.
+This is solved by saving a has cheated value for each question using a boolean array.
+This is saved using onSaveInstanceState method override as well so it is not reset on a device rotate.
+
+3.when users get back to QuizActivity, the user can rotate the device to reset the boolean value mIsCheater.
+This is solved by adding the savedInstanceState in the onCreate.
+This boolean is saved using the onSaveInstanceState method override, so on a device rotate, the value is not lost.
