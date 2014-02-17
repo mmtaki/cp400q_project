@@ -2,6 +2,8 @@ package com.chaumoha.a03;
 
 import java.util.UUID;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -41,7 +43,7 @@ public class ContactFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_contact, parent, false);       
-        
+        getActivity().setTitle(mContact.getFullName());
         mName = (TextView)v.findViewById(R.id.contact_name);
         mName.setText(mContact.getFullName());
         

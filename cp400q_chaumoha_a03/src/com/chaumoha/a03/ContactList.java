@@ -14,9 +14,9 @@ public class ContactList {
     private ContactList(Context appContext) {
         mAppContext = appContext;
         mContacts = new ArrayList<Contact>();
-        mContacts.add(new Contact("Bryan", "Chau", "(416) 993-4832", "contactbryan"));
-        mContacts.add(new Contact("Mily", "Chen", "(647) 818-9833", "contactmily"));
-        mContacts.add(new Contact("Mohamed", "Mohamedtaki", "(647) 895-8796", "contactmo"));
+        mContacts.add(new Contact("Bryan", "Chau", "416-123-4567", "contactbryan"));
+        mContacts.add(new Contact("Mily", "Chen", "647-234-5678", "contactmily"));
+        mContacts.add(new Contact("Mohamed", "Mohamedtaki", "647-345-6789", "contactmo"));
     }
 
     public static ContactList get(Context c) {
