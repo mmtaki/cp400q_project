@@ -2,6 +2,8 @@ package com.chaumoha.a03;
 
 import java.util.UUID;
 
+import com.chaumoha.a03.R;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;

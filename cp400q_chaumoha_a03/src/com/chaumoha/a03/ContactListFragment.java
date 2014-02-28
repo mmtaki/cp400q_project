@@ -2,6 +2,8 @@ package com.chaumoha.a03;
 
 import java.util.ArrayList;
 
+import com.chaumoha.a03.R;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;

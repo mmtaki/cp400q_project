@@ -1,5 +1,7 @@
 package com.chaumoha.a03;
 
+import com.chaumoha.a03.R;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
