@@ -2,12 +2,13 @@ package com.chaumoha.a04;
 
 import java.util.ArrayList;
 
-import com.chaumoha.a04.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,7 @@ public class ContactListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
     	Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         mContacts = ContactList.get(getActivity()).getContacts();
         ContactAdapter adapter = new ContactAdapter(mContacts);
         setListAdapter(adapter);
@@ -72,6 +74,32 @@ public class ContactListFragment extends ListFragment {
 
             return convertView;
         }
+    }
+    
+    @Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.fragment_contact_list, menu);
+	}
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+    	switch(item.getItemId()){
+    	case R.id.menu_item_new_contact:
+    		//Contact contact = new Contact(TAG, TAG, TAG, TAG);
+    		//ContactList.get(getActivity()).addContact(contact);
+    		Intent i = new Intent(getActivity(),NewContactActivity.class);
+    		startActivity(i);
+    		return true;
+    	default:
+    		return super.onOptionsItemSelected(item);
+    	}
+    }
+    
+    @Override        
+    public void onResume(){       
+    	super.onResume();  
+    	((ContactAdapter)getListAdapter()).notifyDataSetChanged();    
     }
 }
 

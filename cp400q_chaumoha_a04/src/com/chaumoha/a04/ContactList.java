@@ -34,5 +34,9 @@ public class ContactList {
     public ArrayList<Contact> getContacts() {
         return mContacts;
     }
+    
+    public void addContact(Contact c){
+    	mContacts.add(c);
+    }
 }
 

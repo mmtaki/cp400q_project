@@ -6,6 +6,7 @@ public class Contact {
 	private UUID mID;
 	private String mFirstName, mLastName, mPhoneNumber, mPhoto;
 	
+	
 	public Contact(String fname, String lname, String phone, String photo) {
 		this.mID = UUID.randomUUID();
 		this.mFirstName = fname;
