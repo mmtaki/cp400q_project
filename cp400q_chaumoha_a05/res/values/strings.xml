@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ChauMoha A05</string>
+    <string name="search_description">Search</string>
+    <string name="postal_hint">Postal Code eg. A1A1A1</string>
+    <string name="no_network">Unable to connect to the database :(</string>
+    <string name="instructions">Please enter a postal code</string>
+
+</resources>
