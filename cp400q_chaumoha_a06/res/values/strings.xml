@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Contacts</string>
+    <string name="action_settings">Bryan Chau &amp; Mohamed Mohamedtaki</string>
+    <string name="photo_description">Contact Photo</string>
+    <string name="new_contact">New Contact</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone">Phone</string>
+    <string name="photo">Photo</string>
+    <string name="add_contact">Add contact</string>
+    <string name="delete_contact">Delete contact</string>
+</resources>
