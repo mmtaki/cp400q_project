@@ -26,23 +26,24 @@ public final class R {
     public static final class id {
         public static final int action_forgot_password=0x7f08000d;
         public static final int action_settings=0x7f08000c;
-        public static final int email=0x7f080006;
+        public static final int email=0x7f080004;
         public static final int fragment_container=0x7f080000;
-        public static final int gridRowImageView=0x7f08000a;
-        public static final int gridRowTextView=0x7f08000b;
+        public static final int gridRowImageView=0x7f080008;
+        public static final int gridRowTextView=0x7f080009;
         public static final int gridview=0x7f080001;
-        public static final int login=0x7f080008;
+        public static final int login=0x7f080006;
         public static final int login_container=0x7f080002;
-        public static final int login_form=0x7f080005;
-        public static final int login_status=0x7f080003;
-        public static final int login_status_message=0x7f080004;
-        public static final int password=0x7f080007;
-        public static final int sign_in_button=0x7f080009;
+        public static final int login_form=0x7f080003;
+        public static final int login_status=0x7f08000a;
+        public static final int login_status_message=0x7f08000b;
+        public static final int password=0x7f080005;
+        public static final int sign_in_button=0x7f080007;
     }
     public static final class layout {
         public static final int activity_grid_menu=0x7f030000;
         public static final int activity_login=0x7f030001;
         public static final int grid_row=0x7f030002;
+        public static final int login_progress=0x7f030003;
     }
     public static final class menu {
         public static final int grid_menu=0x7f070000;
