@@ -285,12 +285,14 @@ containing a value of this type.
         public static final int login=0x7f090001;
     }
     public static final class string {
-        public static final int action_forgot_password=0x7f070024;
+        public static final int action_forgot_password=0x7f070028;
         public static final int action_settings=0x7f07001a;
-        public static final int action_sign_in=0x7f070021;
-        public static final int action_sign_in_short=0x7f070023;
-        public static final int action_sign_up=0x7f070022;
+        public static final int action_sign_in=0x7f070025;
+        public static final int action_sign_in_short=0x7f070027;
+        public static final int action_sign_up=0x7f070026;
+        public static final int app_id=0x7f070021;
         public static final int app_name=0x7f070019;
+        public static final int cancelled=0x7f07001e;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -316,19 +318,21 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_log_in_button=0x7f070008;
         public static final int com_facebook_usersettingsfragment_logged_in=0x7f070009;
         public static final int com_facebook_usersettingsfragment_not_logged_in=0x7f07000a;
-        public static final int error_field_required=0x7f070029;
-        public static final int error_incorrect_password=0x7f070028;
-        public static final int error_invalid_email=0x7f070026;
-        public static final int error_invalid_password=0x7f070027;
+        public static final int error_field_required=0x7f07002d;
+        public static final int error_incorrect_password=0x7f07002c;
+        public static final int error_invalid_email=0x7f07002a;
+        public static final int error_invalid_password=0x7f07002b;
         public static final int hello_world=0x7f07001b;
-        public static final int login_progress_signing_in=0x7f070025;
+        public static final int login_progress_signing_in=0x7f070029;
+        public static final int ok=0x7f070020;
         public static final int or_sign_in_text=0x7f07001d;
+        public static final int permission_not_granted=0x7f07001f;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f07001f;
-        public static final int prompt_password=0x7f070020;
+        public static final int prompt_email=0x7f070023;
+        public static final int prompt_password=0x7f070024;
         public static final int title_activity_grid_menu_fragment=0x7f07001c;
-        public static final int title_activity_login=0x7f07001e;
+        public static final int title_activity_login=0x7f070022;
     }
     public static final class style {
         /** 

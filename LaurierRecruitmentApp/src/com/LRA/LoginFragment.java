@@ -3,11 +3,14 @@ package com.LRA;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +24,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.LRA.R;
+import com.facebook.AppEventsLogger;
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.FacebookOperationCanceledException;
+import com.facebook.Session;
+import com.facebook.SessionLoginBehavior;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.FacebookDialog;
+import com.facebook.widget.LoginButton;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -38,6 +51,7 @@ public class LoginFragment extends Fragment {
 	 * The default email to populate the email field with.
 	 */
 	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+	private final String PENDING_ACTION_BUNDLE_KEY = "com.facebook.samples.hellofacebook:PendingAction";
 
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -54,8 +68,39 @@ public class LoginFragment extends Fragment {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	private LoginButton loginButton;
 	private final PopupWindow popup = new PopupWindow();
 	
+	//Facebook
+	private GraphUser user;
+	private UiLifecycleHelper uiHelper;
+	private PendingAction pendingAction = PendingAction.NONE;
+	private enum PendingAction {
+        NONE,
+        POST_PHOTO,
+        POST_STATUS_UPDATE
+    }
+	
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+    	@Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+        @Override
+        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+            Log.d("Facebook", String.format("Error: %s", error.toString()));
+        }
+
+        @Override
+        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+            Log.d("Facebook", "Success!");
+        }
+    };
+    
+	//Code
 	public static LoginFragment newInstance(){
 		return new LoginFragment();
 	}
@@ -63,6 +108,13 @@ public class LoginFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		uiHelper = new UiLifecycleHelper(getActivity(), callback);
+        uiHelper.onCreate(savedInstanceState);
+        
+        if (savedInstanceState != null) {
+            String name = savedInstanceState.getString(PENDING_ACTION_BUNDLE_KEY);
+            pendingAction = PendingAction.valueOf(name);
+        }
 	}
 
 	
@@ -98,9 +150,19 @@ public class LoginFragment extends Fragment {
 					@Override
 					public void onClick(View view) {
 						attemptLogin();
+						
 					}
 				});
 
+		//Facebook login button
+		loginButton = (LoginButton) getActivity().findViewById(R.id.sign_in_with_facebook_button);
+        loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+            @Override
+            public void onUserInfoFetched(GraphUser user) {
+                LoginFragment.this.user = user;
+            }
+        });
+        
 		return v;
 	}
 	/**
@@ -236,4 +298,76 @@ public class LoginFragment extends Fragment {
 			showProgress(false);
 		}
 	}
+	
+	//Facebook crap
+	@Override
+	public void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+
+        // Call the 'activateApp' method to log an app event for use in analytics and advertising reporting.  Do so in
+        // the onResume methods of the primary Activities that an app may be launched into.
+        AppEventsLogger.activateApp(getActivity());
+
+        //updateUI();
+    }
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+
+        outState.putString(PENDING_ACTION_BUNDLE_KEY, pendingAction.name());
+    }
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
+    }
+	
+	@Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		uiHelper.onDestroy();
+	}
+	
+	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (pendingAction != PendingAction.NONE &&
+                (exception instanceof FacebookOperationCanceledException ||
+                exception instanceof FacebookAuthorizationException)) {
+                new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.cancelled)
+                    .setMessage(R.string.permission_not_granted)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+            pendingAction = PendingAction.NONE;
+        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
+            handlePendingAction();
+        }
+        //updateUI();
+    }
+	
+	@SuppressWarnings("incomplete-switch")
+    private void handlePendingAction() {
+        PendingAction previouslyPendingAction = pendingAction;
+        // These actions may re-set pendingAction if they are still pending, but we assume they
+        // will succeed.
+        pendingAction = PendingAction.NONE;
+
+        switch (previouslyPendingAction) {
+            case POST_PHOTO:
+                //postPhoto();
+                break;
+            case POST_STATUS_UPDATE:
+                //postStatusUpdate();
+                break;
+        }
+    }
 }

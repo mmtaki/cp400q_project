@@ -6,5 +6,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_grid_menu_fragment">GridMenuFragment</string>
     <string name="or_sign_in_text">Or sign in with... </string>
-	
+	<string name="cancelled">Cancelled</string>
+	<string name="permission_not_granted">No permission granted</string>
+	<string name="ok">OK</string>
+	<string name="app_id">355198514515820</string>
 </resources>
