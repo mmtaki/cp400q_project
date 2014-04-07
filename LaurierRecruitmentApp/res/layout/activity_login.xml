@@ -83,6 +83,20 @@
                 facebook:confirm_logout="false"
                 facebook:fetch_user_info="true"
                 />
+            
+            <com.LRA.TwitterLoginButton
+                android:id="@+id/sign_in_with_twitter_button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:layout_marginRight="7dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/twitter_button_background"
+                android:drawableLeft="@drawable/bird_white_48_0"
+                android:text="@string/sign_in_with_twitter"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textColor="#ffffff" />
         </LinearLayout>
 </ScrollView>
 

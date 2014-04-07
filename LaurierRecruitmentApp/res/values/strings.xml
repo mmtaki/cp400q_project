@@ -10,4 +10,5 @@
 	<string name="permission_not_granted">No permission granted</string>
 	<string name="ok">OK</string>
 	<string name="app_id">355198514515820</string>
+	<string name="sign_in_with_twitter">Log in with Twitter</string>
 </resources>
