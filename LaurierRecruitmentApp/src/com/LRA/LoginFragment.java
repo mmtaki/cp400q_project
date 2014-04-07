@@ -1,10 +1,11 @@
 package com.LRA;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,13 +23,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.LRA.R;
 import com.facebook.AppEventsLogger;
 import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
-import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
@@ -81,24 +82,9 @@ public class LoginFragment extends Fragment {
         POST_STATUS_UPDATE
     }
 	
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-    	@Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
-
-    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
-        @Override
-        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-            Log.d("Facebook", String.format("Error: %s", error.toString()));
-        }
-
-        @Override
-        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-            Log.d("Facebook", "Success!");
-        }
-    };
+    //Twitter
+	TwitterHelper twitterHelper;
+	TwitterLoginButton twitterButton;
     
 	//Code
 	public static LoginFragment newInstance(){
@@ -108,9 +94,34 @@ public class LoginFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//Facebook
 		uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
         
+        //Twitter
+        twitterButton = (TwitterLoginButton)getActivity().findViewById(R.id.sign_in_with_twitter_button);
+        twitterButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				twitterHelper = new TwitterHelper(getActivity());
+		        if(!isConnectingToInternet()){
+		        	Toast.makeText(getActivity(), "Could not connect to the internet.", Toast.LENGTH_SHORT).show();
+		        } 
+		        else if(TwitterHelper.TWITTER_CONSUMER_KEY.trim().length() == 0 || 
+		        		TwitterHelper.TWITTER_CONSUMER_SECRET.trim().length() == 0){
+		        	Toast.makeText(getActivity(), "Need to set Twitter OAuth Tokens.", Toast.LENGTH_SHORT).show();
+		        }
+		        else{
+		        	//Actual login
+		        	twitterHelper.loginToTwitter(getActivity());
+		        }
+			}
+		});
+        
+        
+        
+        //
         if (savedInstanceState != null) {
             String name = savedInstanceState.getString(PENDING_ACTION_BUNDLE_KEY);
             pendingAction = PendingAction.valueOf(name);
@@ -149,8 +160,7 @@ public class LoginFragment extends Fragment {
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						attemptLogin();
-						
+						attemptLogin();		
 					}
 				});
 
@@ -160,6 +170,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onUserInfoFetched(GraphUser user) {
                 LoginFragment.this.user = user;
+                //TODO:CAll new intent
+                //openGridMenu();
             }
         });
         
@@ -269,11 +281,13 @@ public class LoginFragment extends Fragment {
 				String[] pieces = credential.split(":");
 				if (pieces[0].equals(mEmail)) {
 					// Account exists, return true if the password matches.
+					loginSuccess();
 					return pieces[1].equals(mPassword);
 				}
 			}
 
 			// TODO: register the new account here.
+			
 			return true;
 		}
 
@@ -299,7 +313,33 @@ public class LoginFragment extends Fragment {
 		}
 	}
 	
+	public void loginSuccess(){
+		Intent i = new Intent(getActivity(), GridMenuActivity.class);
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		//TODO: pass in user and stuff
+		getActivity().startActivity(i);
+	}
+	
 	//Facebook crap
+	
+	private Session.StatusCallback callback = new Session.StatusCallback() {
+    	@Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+
+    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+        @Override
+        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+            Log.d("Facebook", String.format("Error: %s", error.toString()));
+        }
+
+        @Override
+        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+            Log.d("Facebook", "Success!");
+        }
+    };
 	@Override
 	public void onResume() {
         super.onResume();
@@ -370,4 +410,27 @@ public class LoginFragment extends Fragment {
                 break;
         }
     }
+	
+	//Twitter Crap
+	public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+          if (connectivity != null)
+          {
+        	  try{
+        		  NetworkInfo[] info = connectivity.getAllNetworkInfo();
+        		  if (info != null)
+        			  for (int i = 0; i < info.length; i++)
+        				  if (info[i].getState() == NetworkInfo.State.CONNECTED)
+        				  {
+        					  return true;
+        				  }
+        	  }
+        	  catch(Exception e){
+        		  e.printStackTrace();
+        	  }
+          }
+          return false;
+    }
+
+
 }
