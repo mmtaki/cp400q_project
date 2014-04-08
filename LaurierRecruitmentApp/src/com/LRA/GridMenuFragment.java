@@ -82,10 +82,20 @@ public class GridMenuFragment extends Fragment {
 			}
 		});
 		
+		Item virtualTour = new Item("Virtual Tour",R.drawable.visualtour,new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		});
+		
 		//add items to menuItems
-		menuItems.add(social); menuItems.add(account); menuItems.add(samplePdfView); menuItems.add(sampleWebView);
+		menuItems.add(social); menuItems.add(account); menuItems.add(virtualTour); menuItems.add(samplePdfView);
 		menuItems.add(sampleWebView);menuItems.add(sampleWebView);menuItems.add(sampleWebView);menuItems.add(sampleWebView);
-		menuItems.add(sampleWebView);
+		menuItems.add(sampleWebView);menuItems.add(sampleWebView);menuItems.add(sampleWebView);menuItems.add(sampleWebView);
+		menuItems.add(sampleWebView);menuItems.add(sampleWebView);
 	}
 
 }
