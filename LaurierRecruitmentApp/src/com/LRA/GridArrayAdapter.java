@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.LRA.GridArrayAdapter.Item;
-import com.example.LRA.R;
+import com.LRA.R;
 
 public class GridArrayAdapter extends ArrayAdapter<Item> {
 	private Context mContext;

@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -25,7 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.LRA.R;
+import com.LRA.R;
 import com.facebook.AppEventsLogger;
 import com.facebook.FacebookAuthorizationException;
 import com.facebook.FacebookOperationCanceledException;
@@ -46,7 +45,8 @@ public class LoginFragment extends Fragment {
 	 * TODO: remove after connecting to a real authentication system.
 	 */
 	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world","a:a","bryan:bryan" };
+			"foo@example.com:hello", "bar@example.com:world", "a:a",
+			"bryan:bryan" };
 
 	/**
 	 * The default email to populate the email field with.
@@ -71,65 +71,66 @@ public class LoginFragment extends Fragment {
 	private TextView mLoginStatusMessageView;
 	private LoginButton loginButton;
 	private final PopupWindow popup = new PopupWindow();
-	
-	//Facebook
+
+	// Facebook
 	private GraphUser user;
 	private UiLifecycleHelper uiHelper;
 	private PendingAction pendingAction = PendingAction.NONE;
+
 	private enum PendingAction {
-        NONE,
-        POST_PHOTO,
-        POST_STATUS_UPDATE
-    }
-	
-    //Twitter
+		NONE, POST_PHOTO, POST_STATUS_UPDATE
+	}
+
+	// Twitter
 	TwitterHelper twitterHelper;
 	TwitterLoginButton twitterButton;
-    
-	//Code
-	public static LoginFragment newInstance(){
+
+	// Code
+	public static LoginFragment newInstance() {
 		return new LoginFragment();
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//Facebook
+		// Facebook
 		uiHelper = new UiLifecycleHelper(getActivity(), callback);
-        uiHelper.onCreate(savedInstanceState);
-        
-        //Twitter
-        twitterButton = (TwitterLoginButton)getActivity().findViewById(R.id.sign_in_with_twitter_button);
-        twitterButton.setOnClickListener(new View.OnClickListener() {
-			
+		uiHelper.onCreate(savedInstanceState);
+
+		// Twitter
+		twitterButton = (TwitterLoginButton) getActivity().findViewById(
+				R.id.sign_in_with_twitter_button);
+		twitterButton.setOnClickListener(new View.OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				twitterHelper = new TwitterHelper(getActivity());
-		        twitterHelper.mSharedPreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
-		        if(!isConnectingToInternet()){
-		        	Toast.makeText(getActivity(), "Could not connect to the internet.", Toast.LENGTH_SHORT).show();
-		        } 
-		        else{
-		        	//Actual login
-		        	twitterHelper.loginToTwitter(getActivity());
-		        }
+				twitterHelper.mSharedPreferences = getActivity()
+						.getApplicationContext().getSharedPreferences("MyPref",
+								0);
+				if (!isConnectingToInternet()) {
+					Toast.makeText(getActivity(),
+							"Could not connect to the internet.",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					// Actual login
+					twitterHelper.loginToTwitter(getActivity());
+				}
 			}
 		});
-        
-        
-        
-        //
-        if (savedInstanceState != null) {
-            String name = savedInstanceState.getString(PENDING_ACTION_BUNDLE_KEY);
-            pendingAction = PendingAction.valueOf(name);
-        }
+
+		//
+		if (savedInstanceState != null) {
+			String name = savedInstanceState
+					.getString(PENDING_ACTION_BUNDLE_KEY);
+			pendingAction = PendingAction.valueOf(name);
+		}
 	}
 
-	
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.activity_login, parent, false); 
-		
+	public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+			Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.activity_login, parent, false);
 
 		// Set up the login form.
 		mEmail = getActivity().getIntent().getStringExtra(EXTRA_EMAIL);
@@ -151,29 +152,42 @@ public class LoginFragment extends Fragment {
 				});
 
 		mLoginFormView = getActivity().findViewById(R.id.login_form);
-		
 
 		getActivity().findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						attemptLogin();		
+						attemptLogin();
 					}
 				});
 
-		//Facebook login button
-		loginButton = (LoginButton) getActivity().findViewById(R.id.sign_in_with_facebook_button);
-        loginButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
-            @Override
-            public void onUserInfoFetched(GraphUser user) {
-                LoginFragment.this.user = user;
-                //TODO:CAll new intent
-                //openGridMenu();
-            }
-        });
-        
+		// Facebook login button
+		loginButton = (LoginButton) getActivity().findViewById(
+				R.id.sign_in_with_facebook_button);
+		loginButton
+				.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+					@Override
+					public void onUserInfoFetched(GraphUser user) {
+						if (user != null) {
+							LoginFragment.this.user = user;
+							// TODO:CAll new intent
+							// openGridMenu();
+							Toast.makeText(getActivity(),
+									"Welcome " + user.getFirstName() + "!",
+									Toast.LENGTH_SHORT).show();
+							loginSuccess();
+						} else {
+							Toast.makeText(getActivity(),
+									"Unable to login through Facebook",
+									Toast.LENGTH_SHORT).show();
+							
+						}
+					}
+				});
+
 		return v;
 	}
+
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
 	 * If there are form errors (invalid email, missing fields, etc.), the
@@ -196,28 +210,20 @@ public class LoginFragment extends Fragment {
 		View focusView = null;
 
 		/*
-		// Check for a valid password.
-		if (TextUtils.isEmpty(mPassword)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
-			focusView = mPasswordView;
-			cancel = true;
-		} else if (mPassword.length() < 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
-			cancel = true;
-		}
-
-		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}
-*/
+		 * // Check for a valid password. if (TextUtils.isEmpty(mPassword)) {
+		 * mPasswordView.setError(getString(R.string.error_field_required));
+		 * focusView = mPasswordView; cancel = true; } else if
+		 * (mPassword.length() < 4) {
+		 * mPasswordView.setError(getString(R.string.error_invalid_password));
+		 * focusView = mPasswordView; cancel = true; }
+		 * 
+		 * // Check for a valid email address. if (TextUtils.isEmpty(mEmail)) {
+		 * mEmailView.setError(getString(R.string.error_field_required));
+		 * focusView = mEmailView; cancel = true; } else if
+		 * (!mEmail.contains("@")) {
+		 * mEmailView.setError(getString(R.string.error_invalid_email));
+		 * focusView = mEmailView; cancel = true; }
+		 */
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
@@ -239,23 +245,24 @@ public class LoginFragment extends Fragment {
 		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
-		
-		if(show){
-		LinearLayout loginProgress = (LinearLayout)((LinearLayout)LayoutInflater.from(getActivity()).inflate(R.layout.login_progress, new LinearLayout(getActivity()))).getChildAt(0);
-		mLoginStatusView = (ProgressBar)loginProgress.getChildAt(0);
-		mLoginStatusMessageView = (TextView)loginProgress.getChildAt(1);
-		mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-		
-		
-		popup.setFocusable(true);
-		popup.setContentView((LinearLayout)loginProgress.getParent());
-		popup.showAtLocation(new View(getActivity()), Gravity.CENTER, 0, 0);
-		popup.update(0, 0, 100, 100);
+
+		if (show) {
+			LinearLayout loginProgress = (LinearLayout) ((LinearLayout) LayoutInflater
+					.from(getActivity()).inflate(R.layout.login_progress,
+							new LinearLayout(getActivity()))).getChildAt(0);
+			mLoginStatusView = (ProgressBar) loginProgress.getChildAt(0);
+			mLoginStatusMessageView = (TextView) loginProgress.getChildAt(1);
+			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+
+			popup.setFocusable(true);
+			popup.setContentView((LinearLayout) loginProgress.getParent());
+			popup.showAtLocation(new View(getActivity()), Gravity.CENTER, 0, 0);
+			popup.update(0, 0, 100, 100);
 		}
-		
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			mLoginStatusView.animate();
-			mLoginFormView.animate().alpha(show ? 0.5f:1);
+			mLoginFormView.animate().alpha(show ? 0.5f : 1);
 		}
 	}
 
@@ -270,14 +277,14 @@ public class LoginFragment extends Fragment {
 
 			try {
 				// Simulate network access.
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				return false;
 			}
 
 			for (String credential : DUMMY_CREDENTIALS) {
 				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)&&pieces[1].equals(mPassword)) {
+				if (pieces[0].equals(mEmail) && pieces[1].equals(mPassword)) {
 					// Account exists, return true if the password matches.
 					loginSuccess();
 					return true;
@@ -285,7 +292,7 @@ public class LoginFragment extends Fragment {
 			}
 
 			// TODO: register the new account here.
-			
+
 			return false;
 		}
 
@@ -310,64 +317,70 @@ public class LoginFragment extends Fragment {
 			showProgress(false);
 		}
 	}
-	
-	public void loginSuccess(){
+
+	public void loginSuccess() {
 		Intent i = new Intent(getActivity(), GridMenuActivity.class);
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		//TODO: pass in user and stuff
+		// TODO: pass in user and stuff
 		getActivity().startActivity(i);
 	}
-	
-	//Facebook crap
-	
+
+	// Facebook crap
+
 	private Session.StatusCallback callback = new Session.StatusCallback() {
-    	@Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
+		@Override
+		public void call(Session session, SessionState state,
+				Exception exception) {
+			onSessionStateChange(session, state, exception);
+		}
+	};
 
-    private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
-        @Override
-        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-            Log.d("Facebook", String.format("Error: %s", error.toString()));
-        }
+	private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+		@Override
+		public void onError(FacebookDialog.PendingCall pendingCall,
+				Exception error, Bundle data) {
+			Log.d("Facebook", String.format("Error: %s", error.toString()));
+		}
 
-        @Override
-        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-            Log.d("Facebook", "Success!");
-        }
-    };
+		@Override
+		public void onComplete(FacebookDialog.PendingCall pendingCall,
+				Bundle data) {
+			Log.d("Facebook", "Success!");
+		}
+	};
+
 	@Override
 	public void onResume() {
-        super.onResume();
-        uiHelper.onResume();
+		super.onResume();
+		uiHelper.onResume();
 
-        // Call the 'activateApp' method to log an app event for use in analytics and advertising reporting.  Do so in
-        // the onResume methods of the primary Activities that an app may be launched into.
-        AppEventsLogger.activateApp(getActivity());
+		// Call the 'activateApp' method to log an app event for use in
+		// analytics and advertising reporting. Do so in
+		// the onResume methods of the primary Activities that an app may be
+		// launched into.
+		AppEventsLogger.activateApp(getActivity());
 
-        //updateUI();
-    }
-	
+		// updateUI();
+	}
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        uiHelper.onSaveInstanceState(outState);
+		super.onSaveInstanceState(outState);
+		uiHelper.onSaveInstanceState(outState);
 
-        outState.putString(PENDING_ACTION_BUNDLE_KEY, pendingAction.name());
-    }
-	
+		outState.putString(PENDING_ACTION_BUNDLE_KEY, pendingAction.name());
+	}
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
-    }
-	
+		super.onActivityResult(requestCode, resultCode, data);
+		uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
+	}
+
 	@Override
-    public void onPause() {
-        super.onPause();
-        uiHelper.onPause();
+	public void onPause() {
+		super.onPause();
+		uiHelper.onPause();
 	}
 
 	@Override
@@ -375,60 +388,56 @@ public class LoginFragment extends Fragment {
 		super.onDestroy();
 		uiHelper.onDestroy();
 	}
-	
-	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (pendingAction != PendingAction.NONE &&
-                (exception instanceof FacebookOperationCanceledException ||
-                exception instanceof FacebookAuthorizationException)) {
-                new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.cancelled)
-                    .setMessage(R.string.permission_not_granted)
-                    .setPositiveButton(R.string.ok, null)
-                    .show();
-            pendingAction = PendingAction.NONE;
-        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
-            handlePendingAction();
-        }
-        //updateUI();
-    }
-	
+
+	private void onSessionStateChange(Session session, SessionState state,
+			Exception exception) {
+		if (pendingAction != PendingAction.NONE
+				&& (exception instanceof FacebookOperationCanceledException || exception instanceof FacebookAuthorizationException)) {
+			new AlertDialog.Builder(getActivity()).setTitle(R.string.cancelled)
+					.setMessage(R.string.permission_not_granted)
+					.setPositiveButton(R.string.ok, null).show();
+			pendingAction = PendingAction.NONE;
+		} else if (state == SessionState.OPENED_TOKEN_UPDATED) {
+			handlePendingAction();
+		}
+		// updateUI();
+	}
+
 	@SuppressWarnings("incomplete-switch")
-    private void handlePendingAction() {
-        PendingAction previouslyPendingAction = pendingAction;
-        // These actions may re-set pendingAction if they are still pending, but we assume they
-        // will succeed.
-        pendingAction = PendingAction.NONE;
+	private void handlePendingAction() {
+		PendingAction previouslyPendingAction = pendingAction;
+		// These actions may re-set pendingAction if they are still pending, but
+		// we assume they
+		// will succeed.
+		pendingAction = PendingAction.NONE;
 
-        switch (previouslyPendingAction) {
-            case POST_PHOTO:
-                //postPhoto();
-                break;
-            case POST_STATUS_UPDATE:
-                //postStatusUpdate();
-                break;
-        }
-    }
-	
-	//Twitter Crap
-	public boolean isConnectingToInternet(){
-        ConnectivityManager connectivity = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-          if (connectivity != null)
-          {
-        	  try{
-        		  NetworkInfo[] info = connectivity.getAllNetworkInfo();
-        		  if (info != null)
-        			  for (int i = 0; i < info.length; i++)
-        				  if (info[i].getState() == NetworkInfo.State.CONNECTED)
-        				  {
-        					  return true;
-        				  }
-        	  }
-        	  catch(Exception e){
-        		  e.printStackTrace();
-        	  }
-          }
-          return false;
-    }
+		switch (previouslyPendingAction) {
+		case POST_PHOTO:
+			// postPhoto();
+			break;
+		case POST_STATUS_UPDATE:
+			// postStatusUpdate();
+			break;
+		}
+	}
 
+	// Twitter Crap
+	public boolean isConnectingToInternet() {
+		ConnectivityManager connectivity = (ConnectivityManager) getActivity()
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		if (connectivity != null) {
+			try {
+				NetworkInfo[] info = connectivity.getAllNetworkInfo();
+				if (info != null)
+					for (int i = 0; i < info.length; i++)
+						if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+							return true;
+						}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 
 }

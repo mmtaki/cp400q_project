@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">LaurierRecruitmentApp</string>
+    <string name="app_name">Laurier International</string>
+	<string name="app_id">543518702427344</string>
+	<string name="app_secret">547ca667b97636fab4a8058e01735159</string>
+	<string name="facebook_graph">https://graph.facebook.com/</string>
+	<string name="facebook_feedsuff">/feed?access_token=</string>
+	<string name="facebook_page">473668382670224</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_grid_menu_fragment">GridMenuFragment</string>
-    <string name="or_sign_in_text">Or sign in with... </string>
+    <string name="or_sign_in_text">Or sign in with&#8230; </string>
 	<string name="cancelled">Cancelled</string>
 	<string name="permission_not_granted">No permission granted</string>
 	<string name="ok">OK</string>
-	<string name="app_id">355198514515820</string>
 	<string name="sign_in_with_twitter">Log in with Twitter</string>
+	<string name="no_network">Please ensure that you are connected to the internet.</string>
+	<string name="move_back">Back</string>
+	<string name="move_forward">Forward</string>
 </resources>

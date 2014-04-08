@@ -1,6 +1,6 @@
 package com.LRA;
 
-import com.example.LRA.R;
+import com.LRA.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

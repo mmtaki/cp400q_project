@@ -17,7 +17,7 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
-import android.R;
+import com.LRA.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

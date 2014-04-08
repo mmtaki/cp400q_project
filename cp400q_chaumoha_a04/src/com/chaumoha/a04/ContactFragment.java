@@ -71,7 +71,7 @@ public class ContactFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
     	switch(item.getItemId()){
     		case android.R.id.home:
-    			getActivity().finish();
+    			NavUtils.navigateUpFromSameTask(getActivity());
     			return true;
     		default:
     			return super.onOptionsItemSelected(item);
