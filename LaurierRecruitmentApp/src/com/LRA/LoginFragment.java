@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment {
 	 * TODO: remove after connecting to a real authentication system.
 	 */
 	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
+			"foo@example.com:hello", "bar@example.com:world","a:a" };
 
 	/**
 	 * The default email to populate the email field with.
@@ -105,13 +105,10 @@ public class LoginFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				twitterHelper = new TwitterHelper(getActivity());
+		        twitterHelper.mSharedPreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
 		        if(!isConnectingToInternet()){
 		        	Toast.makeText(getActivity(), "Could not connect to the internet.", Toast.LENGTH_SHORT).show();
 		        } 
-		        else if(TwitterHelper.TWITTER_CONSUMER_KEY.trim().length() == 0 || 
-		        		TwitterHelper.TWITTER_CONSUMER_SECRET.trim().length() == 0){
-		        	Toast.makeText(getActivity(), "Need to set Twitter OAuth Tokens.", Toast.LENGTH_SHORT).show();
-		        }
 		        else{
 		        	//Actual login
 		        	twitterHelper.loginToTwitter(getActivity());
@@ -198,6 +195,7 @@ public class LoginFragment extends Fragment {
 		boolean cancel = false;
 		View focusView = null;
 
+		/*
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
@@ -219,7 +217,7 @@ public class LoginFragment extends Fragment {
 			focusView = mEmailView;
 			cancel = true;
 		}
-
+*/
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
@@ -279,16 +277,16 @@ public class LoginFragment extends Fragment {
 
 			for (String credential : DUMMY_CREDENTIALS) {
 				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
+				if (pieces[0].equals(mEmail)&&pieces[1].equals(mPassword)) {
 					// Account exists, return true if the password matches.
 					loginSuccess();
-					return pieces[1].equals(mPassword);
+					return true;
 				}
 			}
 
 			// TODO: register the new account here.
 			
-			return true;
+			return false;
 		}
 
 		@Override

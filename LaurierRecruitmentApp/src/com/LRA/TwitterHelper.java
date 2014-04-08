@@ -42,8 +42,8 @@ public class TwitterHelper implements UsersResources{
 	User twitterUser;
 	private Context c;
 	private Activity a;
-	static String TWITTER_CONSUMER_KEY = "PutYourConsumerKeyHere"; // place your cosumer key here
-    static String TWITTER_CONSUMER_SECRET = "PutYourConsumerSecretHere"; // place your consumer secret here
+	static String TWITTER_CONSUMER_KEY = "gpwVin5m1AJLQAbXGa07dQto2"; // place your cosumer key here
+    static String TWITTER_CONSUMER_SECRET = " 7iDJufbP2dUmBaBUl9YPv6jI3rWtt4rUOKkXvCqNF348rILTwx"; // place your consumer secret here
 
  // Preference Constants
     static String PREFERENCE_NAME = "twitter_oauth";
@@ -51,7 +51,7 @@ public class TwitterHelper implements UsersResources{
     static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
     static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
 
-    static final String TWITTER_CALLBACK_URL = "oauth://t4jsample";
+    static final String TWITTER_CALLBACK_URL = "N/A";
 
     // Twitter oauth urls
     static final String URL_TWITTER_AUTH = "auth_url";
@@ -79,7 +79,7 @@ public class TwitterHelper implements UsersResources{
     private AccessToken accessToken;
 
     // Shared Preferences
-    private static SharedPreferences mSharedPreferences;
+    protected SharedPreferences mSharedPreferences;
 
     
 	public TwitterHelper(Activity a){
@@ -296,12 +296,13 @@ public class TwitterHelper implements UsersResources{
                         try {
 
                             requestToken = twitter
-                                    .getOAuthRequestToken(TWITTER_CALLBACK_URL);
+                                    .getOAuthRequestToken();
                             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri
                                     .parse(requestToken.getAuthenticationURL())));
 
                         } catch (Exception e) {
-                            e.printStackTrace();
+                        	Log.e("TWITTER", e.getMessage());
+                            Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

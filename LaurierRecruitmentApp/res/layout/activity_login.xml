@@ -96,7 +96,8 @@
                 android:text="@string/sign_in_with_twitter"
                 android:textStyle="bold"
                 android:textSize="17sp"
-                android:textColor="#ffffff" />
+                android:textColor="#ffffff" 
+                android:visibility="invisible"></com.LRA.TwitterLoginButton>"
         </LinearLayout>
 </ScrollView>
 
