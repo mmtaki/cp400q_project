@@ -46,34 +46,46 @@ public class GridMenuFragment extends Fragment {
 	}
 	
 	private void populateMenuItems(){
-		Item social = new Item();
-		social.text = "Social Feeds";
-		social.imageResourceId = R.drawable.ic_launcher;
-		social.touch = new View.OnTouchListener() {
-			
+		Item social = new Item("Social Feeds",R.drawable.facebook_twitter_logo_combo1,new View.OnTouchListener() {	
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
 				return false;
 			}
-		};
+		});
+
 		
-		Item test = new Item();
-		test.text = "Test";
-		test.imageResourceId = android.R.drawable.ic_delete;
-		test.touch = new View.OnTouchListener() {
+		Item account = new Item("My Account",R.drawable.account,new View.OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
 				return false;
 			}
-		};
+		});
+		
+		Item samplePdfView = new Item("Sample PDF View",android.R.drawable.ic_menu_gallery,new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		});
+		
+		Item sampleWebView = new Item("Sample Web View",android.R.drawable.ic_menu_gallery,new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Toast.makeText(getActivity(), "TEST", Toast.LENGTH_SHORT).show();
+				return false;
+			}
+		});
 		
 		//add items to menuItems
-		menuItems.add(social); menuItems.add(social); menuItems.add(social);
-		menuItems.add(social); menuItems.add(social); menuItems.add(social);
-		menuItems.add(social); menuItems.add(social); menuItems.add(test);
+		menuItems.add(social); menuItems.add(account); menuItems.add(samplePdfView); menuItems.add(sampleWebView);
+		menuItems.add(sampleWebView);menuItems.add(sampleWebView);menuItems.add(sampleWebView);menuItems.add(sampleWebView);
+		menuItems.add(sampleWebView);
 	}
 
 }

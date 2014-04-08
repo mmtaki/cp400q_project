@@ -66,6 +66,12 @@ public class GridArrayAdapter extends ArrayAdapter<Item> {
     	String text;
     	int imageResourceId;
     	View.OnTouchListener touch;
+    	
+    	Item(String text, int imageResourceId, View.OnTouchListener touch){
+    		this.text=text;
+    		this.imageResourceId=imageResourceId;
+    		this.touch=touch;
+    	}
     }
 }
 
