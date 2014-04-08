@@ -168,22 +168,18 @@ public class LoginFragment extends Fragment {
 				.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
 					@Override
 					public void onUserInfoFetched(GraphUser user) {
+						LoginFragment.this.user = user;
 						if (user != null) {
-							LoginFragment.this.user = user;
-							// TODO:CAll new intent
-							// openGridMenu();
 							Toast.makeText(getActivity(),
 									"Welcome " + user.getFirstName() + "!",
 									Toast.LENGTH_SHORT).show();
 							loginSuccess();
 						} else {
-							Toast.makeText(getActivity(),
-									"Unable to login through Facebook",
-									Toast.LENGTH_SHORT).show();
-							
+							Log.d("Facebook","Unable to login through Facebook");
 						}
 					}
 				});
+		loginButton.setFragment(this);
 
 		return v;
 	}
@@ -320,9 +316,9 @@ public class LoginFragment extends Fragment {
 
 	public void loginSuccess() {
 		Intent i = new Intent(getActivity(), GridMenuActivity.class);
-		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		// TODO: pass in user and stuff
 		getActivity().startActivity(i);
+		getActivity().finish();
 	}
 
 	// Facebook crap
@@ -359,7 +355,6 @@ public class LoginFragment extends Fragment {
 		// the onResume methods of the primary Activities that an app may be
 		// launched into.
 		AppEventsLogger.activateApp(getActivity());
-
 		// updateUI();
 	}
 
