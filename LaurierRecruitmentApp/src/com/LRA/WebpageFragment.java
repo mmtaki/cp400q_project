@@ -63,6 +63,7 @@ public class WebpageFragment extends Fragment {
 		mWebView.getSettings().setJavaScriptEnabled(true);
 		mWebView.getSettings().setUseWideViewPort(true);
 		mWebView.getSettings().setLoadWithOverviewMode(true);
+		mWebView.getSettings().setBuiltInZoomControls(true);
 
 		mWebView.setWebViewClient(new WebViewClient() {
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
